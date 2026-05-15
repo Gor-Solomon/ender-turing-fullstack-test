@@ -1,3 +1,4 @@
+from enum import Enum
 import uuid
 from datetime import datetime, timezone
 
@@ -5,6 +6,10 @@ from pydantic import EmailStr
 from sqlalchemy import DateTime
 from sqlmodel import Field, Relationship, SQLModel
 
+class UserRole(str, Enum):
+    ADMIN = "admin"
+    MANAGER = "manager"
+    MEMBER = "member"
 
 def get_datetime_utc() -> datetime:
     return datetime.now(timezone.utc)
@@ -15,6 +20,7 @@ class UserBase(SQLModel):
     email: EmailStr = Field(unique=True, index=True, max_length=255)
     is_active: bool = True
     is_superuser: bool = False
+    role: UserRole = Field(default=UserRole.MEMBER, max_length=50)
     full_name: str | None = Field(default=None, max_length=255)
 
 

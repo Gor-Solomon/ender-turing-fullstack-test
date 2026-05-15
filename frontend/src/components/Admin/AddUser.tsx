@@ -42,7 +42,7 @@ const formSchema = z
     confirm_password: z
       .string()
       .min(1, { message: "Please confirm your password" }),
-    is_superuser: z.boolean(),
+    role: z.enum(["admin", "manager", "member"]), // Changed from is_superuser
     is_active: z.boolean(),
   })
   .refine((data) => data.password === data.confirm_password, {
@@ -66,7 +66,7 @@ const AddUser = () => {
       full_name: "",
       password: "",
       confirm_password: "",
-      is_superuser: false,
+      role: "member", // Changed from is_superuser
       is_active: false,
     },
   })
@@ -185,18 +185,24 @@ const AddUser = () => {
                 )}
               />
 
+              {/* NEW ROLE DROPDOWN */}
               <FormField
                 control={form.control}
-                name="is_superuser"
+                name="role"
                 render={({ field }) => (
-                  <FormItem className="flex items-center gap-3 space-y-0">
+                  <FormItem>
+                    <FormLabel>User Role</FormLabel>
                     <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
+                      <select
+                        className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                        {...field}
+                      >
+                        <option value="member">Member</option>
+                        <option value="manager">Manager</option>
+                        <option value="admin">Admin</option>
+                      </select>
                     </FormControl>
-                    <FormLabel className="font-normal">Is superuser?</FormLabel>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -205,7 +211,7 @@ const AddUser = () => {
                 control={form.control}
                 name="is_active"
                 render={({ field }) => (
-                  <FormItem className="flex items-center gap-3 space-y-0">
+                  <FormItem className="flex items-center gap-3 space-y-0 mt-2">
                     <FormControl>
                       <Checkbox
                         checked={field.value}
