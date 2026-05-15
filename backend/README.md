@@ -1,5 +1,15 @@
 # FastAPI Project - Backend
 
+## RBAC Permission Matrix
+
+| Action | admin | manager | member |
+|--------|-------|---------|--------|
+| List all users | ✓ | ✓ | ✗ |
+| Create user | ✓ | ✗ | ✗ |
+| View metrics | ✓ | ✓ | ✗ |
+| Update own profile | ✓ | ✓ | ✓ |
+| Update any profile | ✓ | ✗ | ✗ |
+
 ## Requirements
 
 * [Docker](https://www.docker.com/).

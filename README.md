@@ -46,8 +46,30 @@
 
 [![API docs](img/docs.png)](https://github.com/fastapi/full-stack-fastapi-template)
 
-## How To Use It
+## Role-Based Access Control (RBAC)
 
+The project implements a standard RBAC system with three primary roles: **Admin**, **Manager**, and **Member**.
+
+### Permission Matrix
+
+| Feature | Admin | Manager | Member |
+| :--- | :---: | :---: | :---: |
+| List Users | ✓ | ✓ | ✗ |
+| Create User | ✓ | ✗ | ✗ |
+| View Metrics | ✓ | ✓ | ✗ |
+| Manage Items | ✓ | ✓ | ✓ (Own) |
+| Update Profile | ✓ | ✓ | ✓ |
+
+### Implementation Details
+
+**Backend (FastAPI):**
+Authorization is enforced at the route level using a reusable `RoleChecker` dependency. It validates the `role` field within the JWT token payload against the required permissions for each endpoint.
+
+**Frontend (React):**
+- **UI Visibility:** Navigation links and sensitive UI elements (like the "Add User" button) are conditionally rendered based on the user's role.
+- **Route Protection:** Direct navigation to protected pages (e.g., `/admin`, `/metrics`) is handled by `beforeLoad` hooks in the TanStack Router, which redirect unauthorized users back to the dashboard.
+
+## How To Use It
 You can **just fork or clone** this repository and use it as is.
 
 ✨ It just works. ✨

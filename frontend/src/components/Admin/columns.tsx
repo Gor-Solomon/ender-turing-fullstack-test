@@ -39,13 +39,25 @@ export const columns: ColumnDef<UserTableData>[] = [
     ),
   },
   {
-    accessorKey: "is_superuser",
+    accessorKey: "role",
     header: "Role",
-    cell: ({ row }) => (
-      <Badge variant={row.original.is_superuser ? "default" : "secondary"}>
-        {row.original.is_superuser ? "Superuser" : "User"}
-      </Badge>
-    ),
+    cell: ({ row }) => {
+      const role = row.original.role || "member";
+      // Give different colors based on the role
+      const badgeVariant = 
+        role === "admin" ? "default" : 
+        role === "manager" ? "secondary" : 
+        "outline";
+      
+      // Capitalize the first letter for display
+      const displayRole = role.charAt(0).toUpperCase() + role.slice(1);
+
+      return (
+        <Badge variant={badgeVariant}>
+          {displayRole}
+        </Badge>
+      )
+    },
   },
   {
     accessorKey: "is_active",
